@@ -2,7 +2,10 @@ os: linux
 dist: focal
 group: edge
 language: generic
-cache: bundler
+cache: 
+  bundler: true
+  directories:
+    - $HOME/docker
 git:
   depth: 1
 addons:
@@ -15,7 +18,15 @@ addons:
       - xz-utils
 services:
   - docker
+before_cache:
+  # Save tagged docker images
+  - >
+    mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
+    | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
 before_install:
+  # Load cached docker images
+  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
+  
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 2>/dev/null
   - pwd
   - docker pull fr3akyphantom/droid-builder:latest
