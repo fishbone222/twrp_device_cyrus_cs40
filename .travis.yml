@@ -56,6 +56,9 @@ script:
   - echo $HOME/twrp/
   - echo $HOME/builder/twrp/
   - ls $HOME
+  - ls $HOME/build
+  - ls $HOME/builds
+  - ls $HOME/bin
 #  - |
 #    docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):$HOME/builder/twrp/:rw,z" -v "$HOME/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
 #    cd $HOME/builder/twrp/
