@@ -59,16 +59,16 @@ script:
   - ls $HOME/build
   - ls $HOME/builds
   - ls $HOME/bin
-#  - |
-#    docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):$HOME/builder/twrp/:rw,z" -v "$HOME/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
-#    cd $HOME/builder/twrp/
-#    source build/envsetup.sh
-#    # Choose build flavor as "eng" or "userdebug"
-#    BUILD_FLAVOR="eng"
-#    lunch omni_$CODENAME-${BUILD_FLAVOR}
-#    make -j$(nproc --all) recoveryimage
-#    exit
-#    EOF
+  - |
+    docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):$HOME/twrp/:rw,z" -v "$HOME/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
+    cd $HOME/twrp/
+    source build/envsetup.sh
+    # Choose build flavor as "eng" or "userdebug"
+    BUILD_FLAVOR="eng"
+    lunch omni_$CODENAME-${BUILD_FLAVOR}
+    make -j$(nproc --all) recoveryimage
+    exit
+    EOF
 after_success:
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
   - cp $HOME/twrp/out/target/product/$CODENAME/recovery.img $HOME/twrp/TWRP-$version-$CODENAME-$(date +"%Y%m%d")-Unofficial.img
