@@ -11,7 +11,7 @@ git:
 addons:
   apt:
     update:
-#      - true
+      - true
     packages:
       - aria2
       - zstd
