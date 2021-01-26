@@ -59,6 +59,7 @@ script:
   - ls $HOME/build
   - ls $HOME/builds
   - ls $HOME/bin
+  - chmod 777 $HOME -R
   - |
     docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):$HOME/twrp/:rw,z" -v "$HOME/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
     cd $HOME/twrp/
